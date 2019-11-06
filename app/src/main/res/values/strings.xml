@@ -5,4 +5,5 @@
     <string name="buttonClear">clear</string>
     <string name="hintName">Name</string>
     <string name="hintEmail">Email</string>
+    <string name="menu_settings">Settings</string>
 </resources>
