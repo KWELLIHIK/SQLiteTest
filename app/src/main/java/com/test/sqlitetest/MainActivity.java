@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 contentValues.put(DBHelper.KEY_MAIL, email);
 
                 database.insert(DBHelper.TABLE_CONTACTS, null, contentValues);
+                Toast.makeText(getApplicationContext(), "Line added", Toast.LENGTH_SHORT).show();
                 Log.d("mLog", "Row added");
                 break;
 
@@ -74,12 +75,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else
                     Log.d("mLog","0 rows");
 
+                Toast.makeText(getApplicationContext(), "Lines read", Toast.LENGTH_SHORT).show();
+
                 cursor.close();
                 break;
 
             case R.id.btnClear:
                 database.delete(DBHelper.TABLE_CONTACTS, null, null);
                 Log.d("mLog", "Base cleared");
+                Toast.makeText(getApplicationContext(), "Database cleared", Toast.LENGTH_SHORT).show();
                 break;
         }
         dbHelper.close();
