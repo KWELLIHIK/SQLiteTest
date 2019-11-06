@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SQLiteTest</string>
+    <string name="buttonAdd">add</string>
+    <string name="buttonRead">read</string>
+    <string name="buttonClear">clear</string>
+    <string name="hintName">Name</string>
+    <string name="hintEmail">Email</string>
+</resources>
