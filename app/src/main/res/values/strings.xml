@@ -6,4 +6,8 @@
     <string name="hintName">Name</string>
     <string name="hintEmail">Email</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_item_save">Save</string>
+    <string name="menu_item_delete">Delete</string>
+    <string name="txtNumber">Number</string>
+    <string name="txtName">Name</string>
 </resources>
