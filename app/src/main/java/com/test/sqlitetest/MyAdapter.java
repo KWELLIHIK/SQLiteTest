@@ -5,15 +5,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 {
-    String[] names;
-    String[] numbers;
+    ArrayList<String> names;
+    ArrayList<String> numbers;
 
-    public MyAdapter(String[] names, String[] numbers)
+    public MyAdapter(ArrayList<String> names, ArrayList<String> numbers)
     {
         this.names = names;
         this.numbers = numbers;
@@ -30,14 +32,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull MyAdapter.ViewHolder viewHolder, int i)
     {
-        viewHolder.itemName.setText(names[i]);
-        viewHolder.itemNumber.setText(numbers[i]);
+        viewHolder.itemName.setText(names.get(i));
+        viewHolder.itemNumber.setText(numbers.get(i));
     }
 
     @Override
     public int getItemCount()
     {
-        return names.length;
+        return names.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder

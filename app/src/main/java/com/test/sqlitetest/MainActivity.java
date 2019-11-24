@@ -1,7 +1,13 @@
 package com.test.sqlitetest;
 
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +31,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //Часть кода для базы данных
-/*      mDBHelper = new DatabaseHelper(this);
+        mDBHelper = new DatabaseHelper(this);
         try
         {
             mDBHelper.updateDataBase();
@@ -33,43 +39,42 @@ public class MainActivity extends AppCompatActivity
         {
             throw new Error("UnableToUpdateDatabase");
         }
-
         try
         {
             mDb = mDBHelper.getWritableDatabase();
         }catch (SQLException sqlex)
         {
             throw sqlex;
-        }*/
-
+        }
         //Часть кода для RecyclerView
-        String[] names = {
-                "Word",
-                "Excel",
-                "PowerPoint",
-                "Outlook",
-                "Android studio",
-                "Visual Studio Code",
-                "MySQL WorkBench",
-                "Telegram",
-                "MathCAD",
-                "AutoCAD",
-                "Google Chrome",
-                "TeamViewer"};
+        //Наполнение списка данными
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<String> numbers = new ArrayList<>();
 
-        String[] numbers = {
-                "Editeur de texte",
-                "Tableur",
-                "Logiciel de prГ©sentation",
-                "Client de courrier Г©lectronique",
-                "Android Development",
-                "Code development",
-                "Workbench for database",
-                "Messenger",
-                "Math calculations",
-                "Vector redactor",
-                "Web browser",
-                "Remote Control"};
+        Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  user_profile LEFT JOIN abonent ON abonent.user_id = user_profile._id;", null);
+        cursor.moveToFirst();
+
+        while(!cursor.isAfterLast())
+        {
+            if(cursor.isNull(1))
+            {
+                names.add("Имя отсутствует");
+            }else
+            {
+                names.add(cursor.getString(1));
+            }
+            if(cursor.isNull(2))
+            {
+                numbers.add("Номер остутствует");
+            }else
+            {
+                numbers.add(cursor.getString(2));
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+
 
         recyclerView = findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(this);
