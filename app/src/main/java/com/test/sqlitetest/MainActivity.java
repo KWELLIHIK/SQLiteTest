@@ -1,7 +1,5 @@
 package com.test.sqlitetest;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,13 +14,12 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterListener
+public class MainActivity extends AppCompatActivity
 {
     //Переменные для работы с БД
     private DatabaseHelper mDBHelper;
@@ -98,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         recyclerView = findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MyAdapter(abonents, this);
+        adapter = new MyAdapter(abonents);
         recyclerView.setAdapter(adapter);
     }
     //----------------------------------------------------------------------------------------------
@@ -107,32 +104,6 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-
-        //getting the search view from the menu
-        MenuItem searchViewItem = menu.findItem(R.id.menu_search);
-        //getting search manager from systemservice
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        //getting the search view
-        final SearchView searchView = (SearchView) searchViewItem.getActionView();
-        searchView.setIconifiedByDefault(true);
-        //here we will get the search query
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextSubmit(String query)
-            {
-                //do the search here
-                adapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query)
-            {
-                adapter.getFilter().filter(query);
-                return false;
-            }
-        });
         return true;
     }
     //----------------------------------------------------------------------------------------------
@@ -150,13 +121,11 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
             case R.id.menu_logout:
                 Toast.makeText(this, "Вы нажали Выход", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.menu_search:
+                Toast.makeText(this, "Вы еажали Поиск", Toast.LENGTH_SHORT).show();
+                break;
         }
         return true;
     }
     //----------------------------------------------------------------------------------------------
-    @Override
-    public void onAbonentSelected(Abonent abonent)
-    {
-        Toast.makeText(getApplicationContext(), "Выбран: " + abonent.getName() + ", " + abonent.getNumber(), Toast.LENGTH_LONG).show();
-    }
 }
