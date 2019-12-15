@@ -1,10 +1,5 @@
 package com.test.sqlitetest;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,16 +8,22 @@ import android.os.Bundle;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SearchActivity extends AppCompatActivity
-{
-    //Переменные для работы с БД
-    private DatabaseHelper mDBHelper;
-    private SQLiteDatabase mDb;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+
 
     //RecyclerView
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     MyAdapter adapter;
+
+    //SearchView
+    SearchView editSearch;
     //----------------------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,6 +34,10 @@ public class SearchActivity extends AppCompatActivity
         //Getting ToolBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar); //placing toolbar in place of actionbar
+
+        //Переменные для работы с БД
+        DatabaseHelper mDBHelper;
+        SQLiteDatabase mDb;
 
         //Часть кода для базы данных
         mDBHelper = new DatabaseHelper(this);
@@ -90,6 +95,24 @@ public class SearchActivity extends AppCompatActivity
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MyAdapter(abonents);
         recyclerView.setAdapter(adapter);
+
+        editSearch = (SearchView) findViewById(R.id.search);
+        editSearch.setOnQueryTextListener(this);
     }
     //----------------------------------------------------------------------------------------------
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
+        String text = newText;
+        adapter.filter(text);
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+
 }

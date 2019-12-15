@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, "Вы нажали About", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_search:
-                Toast.makeText(this, "Вы еажали Поиск", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Вы нажали Поиск", Toast.LENGTH_SHORT).show();
                 Intent intent  = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
                 break;

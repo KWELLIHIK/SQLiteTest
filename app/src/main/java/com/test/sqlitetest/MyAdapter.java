@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,17 +14,21 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 {
     private ArrayList<Abonent> abonents;
+    private ArrayList<Abonent> copy;
     //----------------------------------------------------------------------------------------------
     public MyAdapter(ArrayList<Abonent> abonents)
     {
         this.abonents = abonents;
+        this.copy = new ArrayList<Abonent>();
+        this.copy.addAll(abonents);
     }
     //----------------------------------------------------------------------------------------------
     @NonNull
     @Override
     public MyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
     {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_item, viewGroup,false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_item,
+                viewGroup,false);
         return new ViewHolder(v);
     }
     //----------------------------------------------------------------------------------------------
@@ -53,4 +58,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         }
     }
     //----------------------------------------------------------------------------------------------
+    public void filter(String charText)
+    {
+        charText = charText.toLowerCase(Locale.getDefault());
+        abonents.clear();
+        if (charText.length() == 0)
+        {
+            abonents.addAll(copy);
+        } else
+            {
+            for (Abonent wp : copy)
+            {
+                if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText))
+                {
+                    abonents.add(wp);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
 }
