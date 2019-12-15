@@ -1,26 +1,19 @@
 package com.test.sqlitetest;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class SearchActivity extends AppCompatActivity
 {
     //Переменные для работы с БД
     private DatabaseHelper mDBHelper;
@@ -35,9 +28,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_search);
 
-        Toolbar toolbar = findViewById(R.id.toolbar); //getting the toolbar
+        //Getting ToolBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar); //placing toolbar in place of actionbar
 
         //Часть кода для базы данных
@@ -91,42 +85,11 @@ public class MainActivity extends AppCompatActivity
         }
         cursor.close();
 
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.searchRecyclerView);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MyAdapter(abonents);
         recyclerView.setAdapter(adapter);
-    }
-    //----------------------------------------------------------------------------------------------
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-    //----------------------------------------------------------------------------------------------
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case R.id.menu_about:
-                Toast.makeText(this, "Вы нажали About", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.menu_search:
-                Toast.makeText(this, "Вы еажали Поиск", Toast.LENGTH_SHORT).show();
-                Intent intent  = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_settings:
-                Toast.makeText(this, "Вы нажали Settings", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.menu_logout:
-                finish();
-                break;
-        }
-        return true;
     }
     //----------------------------------------------------------------------------------------------
 }
