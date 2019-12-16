@@ -69,7 +69,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
             {
             for (Abonent wp : copy)
             {
-                if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText))
+                if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText) || wp.getNumber().contains(charText))
                 {
                     abonents.add(wp);
                 }

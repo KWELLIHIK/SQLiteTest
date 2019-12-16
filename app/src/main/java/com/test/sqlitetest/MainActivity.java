@@ -1,6 +1,5 @@
 package com.test.sqlitetest;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,12 +14,13 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener
 {
     //Переменные для работы с БД
     private DatabaseHelper mDBHelper;
@@ -103,6 +103,15 @@ public class MainActivity extends AppCompatActivity
     {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
+
+        //getting the search view from the menu
+        MenuItem searchViewItem = menu.findItem(R.id.menu_search);
+
+        //getting the search view
+        final SearchView searchView = (SearchView) searchViewItem.getActionView();
+
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(this);
         return true;
     }
     //----------------------------------------------------------------------------------------------
@@ -114,11 +123,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.menu_about:
                 Toast.makeText(this, "Вы нажали About", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.menu_search:
-                Toast.makeText(this, "Вы нажали Поиск", Toast.LENGTH_SHORT).show();
-                Intent intent  = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(intent);
-                break;
             case R.id.menu_settings:
                 Toast.makeText(this, "Вы нажали Settings", Toast.LENGTH_SHORT).show();
                 break;
@@ -127,6 +131,20 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         return true;
+    }
+    //----------------------------------------------------------------------------------------------
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+        return false;
+    }
+    //----------------------------------------------------------------------------------------------
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
+        String text = newText;
+        adapter.filter(text);
+        return false;
     }
     //----------------------------------------------------------------------------------------------
 }
