@@ -4,7 +4,6 @@
     <string name="buttonRead">read</string>
     <string name="buttonClear">clear</string>
     <string name="hintName">Name</string>
-    <string name="hintEmail">Email</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_item_save">Save</string>
     <string name="menu_item_delete">Delete</string>
@@ -14,4 +13,20 @@
     <string name="main_menu_settings">Settings</string>
     <string name="main_menu_logout">Logout</string>
     <string name="main_menu_search">Search</string>
+    <string name="main_menu_add">Add</string>
+    <string name="title_activity_add">AddActivity</string>
+    <string name="action_settings">Settings</string>
+    //-----------------------------------------------
+    <string name="et_name">Имя</string>
+    <string name="et_number">Номер</string>
+    <string name="et_address">Адрес</string>
+    <string name="et_age">Возраст</string>
+    <string name="et_plan">Тарифный план</string>
+    <string name="et_employer_name">Имя сотрудника</string>
+    <string name="et_additional_service">Допольнительная услуга</string>
+    <string name="et_date_start_additional_service">Дата начала</string>
+    <string name="et_date_end_additional_service">Дата окончания</string>
+    <string name="et_balance">Баланс</string>
+    <string name="et_registration_date">Дата регистрации</string>
+    <string name="et_debit_date">Дата списания средств</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.test.sqlitetest;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -125,6 +126,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 break;
             case R.id.menu_settings:
                 Toast.makeText(this, "Вы нажали Settings", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_add:
+                Toast.makeText(this, "Нажата кнопка добавить", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                startActivity(intent);
                 break;
             case R.id.menu_logout:
                 finish();
