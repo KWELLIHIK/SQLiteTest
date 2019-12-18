@@ -43,29 +43,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         //Часть кода для базы данных
         mDBHelper = new DatabaseHelper(this);
-        try
-        {
-            mDBHelper.updateDataBase();
-        }catch (IOException ex)
-        {
-            throw new Error("UnableToUpdateDatabase");
-        }
-        try
-        {
-            mDb = mDBHelper.getWritableDatabase();
-        }catch (SQLException sqlex)
-        {
-            throw sqlex;
-        }
+        mDb = mDBHelper.getWritableDatabase();
+
         //Часть кода для RecyclerView
         //Наполнение списка данными
         ArrayList<Abonent> abonents = new ArrayList<>();
 
         //Показывает всех абонентов
-        //Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  user_profile LEFT JOIN abonent ON abonent.user_id = user_profile._id;", null);
+        Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  user_profile LEFT JOIN abonent ON abonent.user_id = user_profile._id;", null);
 
         //Показывает только тех, у кого есть номер
-        Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  abonent LEFT JOIN user_profile ON user_profile._id = abonent.user_id;", null);
+        //Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  abonent LEFT JOIN user_profile ON user_profile._id = abonent.user_id;", null);
 
         cursor.moveToFirst();
 
@@ -121,9 +109,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     {
         switch (item.getItemId())
         {
-            case R.id.menu_about:
-                Toast.makeText(this, "Вы нажали About", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.menu_settings:
                 Toast.makeText(this, "Вы нажали Settings", Toast.LENGTH_SHORT).show();
                 break;

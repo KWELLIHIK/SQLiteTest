@@ -15,9 +15,6 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/menu_about"
-        android:title="@string/main_menu_about"/>
-    <item
         android:id="@+id/menu_settings"
         android:title="@string/main_menu_settings"/>
     <item

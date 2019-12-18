@@ -15,11 +15,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
 {
     private static String DB_NAME = "SQLiteTest.db";
     private static String DB_PATH = "";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     private SQLiteDatabase mDataBase;
     private final Context mContext;
-    private boolean mNeedUpdate = false;
+    boolean mNeedUpdate = false;
 
     public DatabaseHelper(Context context)
     {
