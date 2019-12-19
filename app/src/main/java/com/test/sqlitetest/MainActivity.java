@@ -1,18 +1,25 @@
 package com.test.sqlitetest;
 
+import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -30,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     MyAdapter adapter;
+
     //----------------------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,10 +57,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         ArrayList<Abonent> abonents = new ArrayList<>();
 
         //Показывает всех абонентов
-        Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  user_profile LEFT JOIN abonent ON abonent.user_id = user_profile._id;", null);
+        //Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  user_profile LEFT JOIN abonent ON abonent.user_id = user_profile._id;", null);
 
         //Показывает только тех, у кого есть номер
-        //Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  abonent LEFT JOIN user_profile ON user_profile._id = abonent.user_id;", null);
+        final Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  abonent LEFT JOIN user_profile ON user_profile._id = abonent.user_id;", null);
 
         cursor.moveToFirst();
 
@@ -85,10 +93,79 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         adapter = new MyAdapter(abonents, new MyAdapter.OnItemClickListener()
         {
             @Override
-            public void onItemClick(View v, int position, boolean isLongClick, ArrayList<Abonent> abonents)
+            public void onItemClick(View v, final int position, boolean isLongClick, final ArrayList<Abonent> abonents)
             {
                 Toast.makeText(MainActivity.this, "Position - " + position, Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setTitle("Диалог");
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dialog_edit);
 
+                //Инициализация EditText
+                final EditText et_dialog_name = dialog.findViewById(R.id.et_dialog_name);
+                final EditText et_dialog_number = dialog.findViewById(R.id.et_dialog_number);
+                et_dialog_name.setText(abonents.get(position).getName());
+                et_dialog_number.setText(abonents.get(position).getNumber());
+
+                //Получение user_id
+                Cursor idCursor = mDb.rawQuery("SELECT user_profile._id,user_profile.user_name,abonent.mobile_number,abonent._id " +
+                        "FROM abonent LEFT JOIN user_profile ON user_profile._id = abonent.user_id WHERE user_profile.user_name='" +
+                        abonents.get(position).getName().trim() +
+                        "' AND abonent.mobile_number='" + abonents.get(position).getNumber().trim() + "';", null);
+                idCursor.moveToFirst();
+                final int user_id = idCursor.getInt(0);
+                final int abonent_id = idCursor.getInt(3);
+                idCursor.close();
+
+                //Кнопка Отмена
+                Button dialog_btn_cancel = dialog.findViewById(R.id.dialog_btn_cancel);
+                dialog_btn_cancel.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+
+                //Кнопка Ок
+                Button dialog_btn_ok = dialog.findViewById(R.id.dialog_btn_ok);
+                dialog_btn_ok.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        //Обновление номера
+                        ContentValues cvUpdateAbonent = new ContentValues();
+                        cvUpdateAbonent.put("mobile_number", et_dialog_number.getText().toString().trim());
+                        mDb.update("abonent", cvUpdateAbonent, "user_id='" + user_id + "'", null);
+                        cvUpdateAbonent.clear();
+
+                        //Обновление имени
+                        ContentValues cvUpdateProfile = new ContentValues();
+                        cvUpdateProfile.put("user_name", et_dialog_name.getText().toString().trim());
+                        mDb.update("user_profile", cvUpdateProfile, "_id='" + user_id + "'", null);
+                        cvUpdateProfile.clear();
+
+                        Toast.makeText(MainActivity.this, "Обновлено", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                //Кнопка Удалить
+                Button dialog_btn_delete = dialog.findViewById(R.id.dialog_btn_delete);
+                dialog_btn_delete.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        mDb.delete("abonent", "user_id='" + user_id + "'", null);
+                        mDb.delete("user_profile", "_id='" + user_id + "'", null);
+                        mDb.delete("additional_service", "abonent_id='" + abonent_id + "'", null);
+
+                        Toast.makeText(MainActivity.this, "Удалено", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         recyclerView.setAdapter(adapter);
@@ -145,6 +222,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return false;
     }
     //----------------------------------------------------------------------------------------------
+
+    @Override
+    protected void onDestroy()
+    {
+        mDBHelper.close();
+        mDb.close();
+        super.onDestroy();
+    }
 
     //----------------------------------------------------------------------------------------------
 }
