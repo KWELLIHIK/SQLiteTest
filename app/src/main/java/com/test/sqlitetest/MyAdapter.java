@@ -3,6 +3,7 @@ package com.test.sqlitetest;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,13 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 {
     private ArrayList<Abonent> abonents;
+    public OnItemClickListener itemClickListener;
     private ArrayList<Abonent> copy;
     //----------------------------------------------------------------------------------------------
-    public MyAdapter(ArrayList<Abonent> abonents)
+    public MyAdapter(ArrayList<Abonent> abonents, OnItemClickListener itemClickListener)
     {
         this.abonents = abonents;
         this.copy = new ArrayList<Abonent>();
         this.copy.addAll(abonents);
+        this.itemClickListener = itemClickListener;
     }
     //----------------------------------------------------------------------------------------------
     @NonNull
@@ -45,7 +48,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
         return abonents.size();
     }
     //----------------------------------------------------------------------------------------------
-    class ViewHolder extends RecyclerView.ViewHolder
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private TextView itemName;
         private TextView itemNumber;
@@ -55,7 +58,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
             super(itemView);
             itemName = itemView.findViewById(R.id.item_name);
             itemNumber = itemView.findViewById(R.id.item_number);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v)
+        {
+            itemClickListener.onItemClick(v, getLayoutPosition(), false, abonents);
+        }
+    }
+    public interface OnItemClickListener
+    {
+        void onItemClick(View v, int position, boolean isLongClick, ArrayList<Abonent> abonents);
     }
     //----------------------------------------------------------------------------------------------
     public void filter(String charText)

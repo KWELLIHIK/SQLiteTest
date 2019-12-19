@@ -2,15 +2,14 @@ package com.test.sqlitetest;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -83,7 +82,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         recyclerView = findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MyAdapter(abonents);
+        adapter = new MyAdapter(abonents, new MyAdapter.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(View v, int position, boolean isLongClick, ArrayList<Abonent> abonents)
+            {
+                Toast.makeText(MainActivity.this, "Position - " + position, Toast.LENGTH_SHORT).show();
+
+            }
+        });
         recyclerView.setAdapter(adapter);
     }
     //----------------------------------------------------------------------------------------------
@@ -137,5 +144,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         adapter.filter(text);
         return false;
     }
+    //----------------------------------------------------------------------------------------------
+
     //----------------------------------------------------------------------------------------------
 }
