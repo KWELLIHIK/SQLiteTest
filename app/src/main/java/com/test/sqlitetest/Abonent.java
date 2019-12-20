@@ -4,6 +4,8 @@ public class Abonent
 {
     String name;
     String number;
+    String balance;
+    String plan;
     //----------------------------------------------------------------------------------------------
     public Abonent()
     {
@@ -28,5 +30,21 @@ public class Abonent
     public void setNumber(String number)
     {
         this.number = number;
+    }
+    //----------------------------------------------------------------------------------------------
+    public String getBalance() {
+        return balance;
+    }
+    //----------------------------------------------------------------------------------------------
+    public void setBalance(String balance) {
+        this.balance = balance;
+    }
+    //----------------------------------------------------------------------------------------------
+    public String getPlan() {
+        return plan;
+    }
+    //----------------------------------------------------------------------------------------------
+    public void setPlan(String plan) {
+        this.plan = plan;
     }
 }

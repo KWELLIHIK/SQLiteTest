@@ -6,6 +6,7 @@
     <string name="main_menu_search">Поиск</string>
     <string name="main_menu_add">Добавить</string>
     <string name="title_activity_add">Добавление</string>
+    <string name="main_activity_title">Абоненты</string>
     //----------------------------------------------------------------------------------------------
     <string name="dialog_btn_ok">Ок</string>
     <string name="dialog_btn_delete">Удалить</string>

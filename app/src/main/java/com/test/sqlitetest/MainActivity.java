@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         //Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  user_profile LEFT JOIN abonent ON abonent.user_id = user_profile._id;", null);
 
         //Показывает только тех, у кого есть номер
-        final Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number FROM  abonent LEFT JOIN user_profile ON user_profile._id = abonent.user_id;", null);
+        final Cursor cursor = mDb.rawQuery("SELECT user_profile._id, user_profile.user_name, abonent.mobile_number, abonent.balance, plans.plan_name FROM  abonent LEFT JOIN user_profile ON user_profile._id=abonent.user_id join plans on abonent.plan_id=plans._id;", null);
 
         cursor.moveToFirst();
 
@@ -81,6 +78,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }else
             {
                 abonent.setNumber(cursor.getString(2));
+            }
+            if(cursor.isNull(3))
+            {
+                abonent.setBalance("Нет информации");
+            }else
+            {
+                abonent.setBalance(cursor.getString(3));
+            }
+            if(cursor.isNull(4))
+            {
+                abonent.setPlan("Нет информации");
+            }else
+            {
+                abonent.setPlan(cursor.getString(4));
             }
             abonents.add(abonent);
             cursor.moveToNext();
@@ -104,8 +115,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 //Инициализация EditText
                 final EditText et_dialog_name = dialog.findViewById(R.id.et_dialog_name);
                 final EditText et_dialog_number = dialog.findViewById(R.id.et_dialog_number);
+                final EditText et_dialog_balance = dialog.findViewById(R.id.et_dialog_balance);
+                final EditText et_dialog_plan = dialog.findViewById(R.id.et_dialog_plan);
                 et_dialog_name.setText(abonents.get(position).getName());
                 et_dialog_number.setText(abonents.get(position).getNumber());
+                et_dialog_balance.setText(abonents.get(position).getBalance());
+                et_dialog_plan.setText(abonents.get(position).getPlan());
 
                 //Получение user_id
                 Cursor idCursor = mDb.rawQuery("SELECT user_profile._id,user_profile.user_name,abonent.mobile_number,abonent._id " +
@@ -148,7 +163,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         mDb.update("user_profile", cvUpdateProfile, "_id='" + user_id + "'", null);
                         cvUpdateProfile.clear();
 
+                        //Обновление баланса
+                        ContentValues cvUpdateBalance = new ContentValues();
+                        cvUpdateBalance.put("balance",et_dialog_balance.getText().toString().trim());
+                        mDb.update("abonent", cvUpdateBalance, "user_id='" + user_id + "'", null);
+                        cvUpdateBalance.clear();
+
                         Toast.makeText(MainActivity.this, "Обновлено", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
 
